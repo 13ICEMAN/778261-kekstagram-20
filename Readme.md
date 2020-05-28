@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Георгий Лахманов](https://up.htmlacademy.ru/javascript/20/user/778261).
-* Наставник:  [Алексей Толстоног](https://htmlacademy.ru/profile/id620625).
+* Наставник: [Алексей Толстоног](https://htmlacademy.ru/profile/id620625).
 
 ---
 
