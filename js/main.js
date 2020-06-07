@@ -18,6 +18,9 @@ var comments = ['Всё отлично!',
 
 var names = ['Алексей)', 'Богдан', 'Лиза', 'Света', 'Георгий', 'Серега', 'Ибрагим', 'Нурлан'];
 
+var pictures = document.querySelector('.pictures');
+var pictureTemplate = document.querySelector('#picture').content;
+
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -32,20 +35,20 @@ var generateMessage = function () {
 };
 
 var generateComments = function () {
-  var commentsArray = [];
+  var reviews = [];
   for (var i = 0; i <= getRandomNumber(MIN, COMMENT_MAX); i++) {
     var comment = {
       avatar: 'img/avatar-' + getRandomNumber(MIN, AVATAR_MAX) + '.svg',
       message: generateMessage(),
       name: names[getRandomNumber(0, names.length - 1)]
     };
-    commentsArray.push(comment);
+    reviews.push(comment);
   }
-  return commentsArray;
+  return reviews;
 };
 
 var generatePhotos = function () {
-  var photosArray = [];
+  var images = [];
   for (var i = MIN; i <= PHOTOS_MAX; i++) {
     var photo = {
       url: 'photos/' + i + '.jpg',
@@ -53,9 +56,9 @@ var generatePhotos = function () {
       likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
       comments: generateComments()
     };
-    photosArray.push(photo);
+    images.push(photo);
   }
-  return photosArray;
+  return images;
 };
 
 var renderPhoto = function (photo) {
@@ -69,11 +72,14 @@ var renderPhoto = function (photo) {
 };
 
 var photos = generatePhotos();
-var pictures = document.querySelector('.pictures');
-var pictureTemplate = document.querySelector('#picture').content;
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < photos.length; i++) {
-  fragment.appendChild(renderPhoto(photos[i]));
-}
-pictures.appendChild(fragment);
+var createFragment = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < photos.length; i++) {
+    fragment.appendChild(renderPhoto(photos[i]));
+  }
+  pictures.appendChild(fragment);
+  return fragment;
+};
+
+createFragment();
