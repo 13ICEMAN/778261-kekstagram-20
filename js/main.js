@@ -20,6 +20,8 @@ var names = ['Алексей)', 'Богдан', 'Лиза', 'Света', 'Ге�
 
 var pictures = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content;
+var commentList = document.querySelector('.social__comments');
+var commentItem = document.querySelector('.social__comment');
 
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -52,7 +54,7 @@ var generatePhotos = function () {
   for (var i = MIN; i <= PHOTOS_MAX; i++) {
     var photo = {
       url: 'photos/' + i + '.jpg',
-      description: 'photoDescription',
+      description: 'Описание фотографии',
       likes: getRandomNumber(LIKES_MIN, LIKES_MAX),
       comments: generateComments()
     };
@@ -83,3 +85,45 @@ var renderPhotos = function () {
 };
 
 renderPhotos();
+
+var renderBigPhoto = function (photo) {
+  var bigPicture = document.querySelector('.big-picture');
+  bigPicture.classList.remove('hidden');
+
+  bigPicture.querySelector('.big-picture__img img').src = photo.url;
+  bigPicture.querySelector('.likes-count').textContent = photo.likes;
+  bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
+  bigPicture.querySelector('.social__caption').textContent = photo.description;
+
+  bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  bigPicture.querySelector('.comments-loader').classList.add('hidden');
+
+  return bigPicture;
+};
+
+renderBigPhoto(photos[0]);
+
+var renderComment = function (comment) {
+  var commentElement = commentItem.cloneNode(true);
+
+  commentElement.querySelector('.social__picture').src = comment.avatar;
+  commentElement.querySelector('.social__picture').alt = comment.name;
+  commentElement.querySelector('.social__text').textContent = comment.message;
+
+  return commentElement;
+};
+
+var socialComments = generateComments();
+
+var renderComments = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < socialComments.length; i++) {
+    fragment.appendChild(renderComment(socialComments[i]));
+  }
+  commentList.appendChild(fragment);
+  return fragment;
+};
+
+renderComments();
+
+document.querySelector('body').classList.add('modal-open');
