@@ -268,31 +268,64 @@ imgForm.action = 'https://javascript.pages.academy/kekstagram';
 
 var hashtagInput = document.querySelector('.text__hashtags');
 
+// hashtagInput.addEventListener('input', function () {
+//   var hashtags = hashtagInput.split(' ');
+//   var hashtag = hashtags[i];
+//   var re = /^#[а-яА-Яa-zA-Z0-9]+$/;
+//   for (var i = 0; i < hashtags.length; i++) {
+//     var hashtagLetters = hashtags[i].split('');
+//     for (var j = 0; j < hashtagLetters.length; j++) {
+//       if (hashtagLetters[0] !== '#') {
+//         hashtagInput.setCustomValidity('Хэштег должен начинаться с #');
+//       } else {
+//         hashtagInput.setCustomValidity('');
+//       }
+//     }
+//     if (re.exec(hashtag)) {
+//       hashtagInput.setCustomValidity('Хэштег должен содержать только буквы и цифры');
+//     } else if (hashtags[i].length < HASHTAG_MIN) {
+//       hashtagInput.setCustomValidity('Хэштег должен состоять минимум из 2-х символов');
+//     } else if (hashtags[i].length > HASHTAG_MAX) {
+//       hashtagInput.setCustomValidity('Удалите лишние ' + (hashtags[i].length - HASHTAG_MAX) + ' символы в хэштеге');
+//     } else if (hashtags.length > HASHTAGS_MAX) {
+//       hashtagInput.setCustomValidity('Максимально допустимое количество хэштегов - 5 шт.');
+//     } else if (hashtag === hashtags[i] && hashtag.toLowerCase() === hashtags[i].toLowerCase()) {
+//       hashtagInput.setCustomValidity('Один и тот же хэштег не может быть использован дважды');
+//     } else {
+//       hashtagInput.setCustomValidity('');
+//     }
+//   }
+// });
+
 hashtagInput.addEventListener('input', function () {
-  var hashtags = hashtagInput.split(' ');
-  var hashtag = hashtags[i];
-  var re = /^#[а-яА-Яa-zA-Z0-9]+$/;
+  var errorMessage = '';
+  var lastHashtag = null;
+  var hashtags = hashtagInput.value.split(' ');
+  var tagsWithOwtLastElement = hashtags.slice();
+  for (var j = 0; j < tagsWithOwtLastElement.length; j++) {
+    tagsWithOwtLastElement[j].toLowerCase();
+  }
+  var re = /^#[а-яА-Яa-zA-Z0-9]*$/;
   for (var i = 0; i < hashtags.length; i++) {
+    lastHashtag = hashtags[hashtags.length - 1];
     var hashtagLetters = hashtags[i].split('');
-    for (var j = 0; j < hashtagLetters.length; j++) {
-      if (hashtagLetters[0] !== '#') {
-        hashtagInput.setCustomValidity('Хэштег должен начинаться с #');
-      } else {
-        hashtagInput.setCustomValidity('');
-      }
-    }
-    if (re.exec(hashtag)) {
-      hashtagInput.setCustomValidity('Хэштег должен содержать только буквы и цифры');
-    } else if (hashtags[i].length < HASHTAG_MIN) {
-      hashtagInput.setCustomValidity('Хэштег должен состоять минимум из 2-х символов');
+
+    if (hashtagLetters[0] !== '#') {
+      errorMessage = 'Хэштег должен начинаться с #';
+    } else if (hashtagLetters.length < HASHTAG_MIN) {
+      errorMessage = 'Хэштег должен состоять минимум из 2-х символов';
     } else if (hashtags[i].length > HASHTAG_MAX) {
-      hashtagInput.setCustomValidity('Удалите лишние ' + (hashtags[i].length - HASHTAG_MAX) + ' символы в хэштеге');
+      errorMessage = 'Удалите лишние ' + (hashtags[i].length - HASHTAG_MAX) + ' символы в хэштеге';
     } else if (hashtags.length > HASHTAGS_MAX) {
-      hashtagInput.setCustomValidity('Максимально допустимое количество хэштегов - 5 шт.');
-    } else if (hashtag === hashtags[i] && hashtag.toLowerCase() === hashtags[i].toLowerCase()) {
-      hashtagInput.setCustomValidity('Один и тот же хэштег не может быть использован дважды');
+      errorMessage = 'Максимально допустимое количество хэштегов - 5 шт.';
+    } else if (tagsWithOwtLastElement.includes(lastHashtag)) {
+      errorMessage = 'Один и тот же хэштег не может быть использован дважды';
+    } else if (re.exec(hashtagLetters.shift())) {
+      errorMessage = 'Хэштег должен содержать только буквы и цифры';
     } else {
-      hashtagInput.setCustomValidity('');
+      errorMessage = '';
     }
+
+    hashtagInput.setCustomValidity(errorMessage);
   }
 });
